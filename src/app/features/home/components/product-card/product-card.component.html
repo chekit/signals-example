@@ -1,0 +1,16 @@
+<div class="product-card">
+  <div class="product-card__title">
+    <h2>{{ product.title }}</h2>
+  </div>
+  <div class="product-card__image">
+    <img src="{{ product.images[0] }}" alt="{{ product.title }}" />
+  </div>
+  <div class="product-card__description">
+    <p>{{ product.description }}</p>
+  </div>
+  <div class="product-card__manage">
+    <a class="product-card__button" [routerLink]="['product', product.id]"
+      >More..</a
+    >
+  </div>
+</div>

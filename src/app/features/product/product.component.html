@@ -1,0 +1,11 @@
+<ng-container *ngIf="product$ | async as product">
+  <h1>{{ product.title }}</h1>
+  <p>{{ product.description }}</p>
+  <div>
+    <img
+      *ngFor="let source of product.images"
+      [src]="source"
+      alt="{{ product.description }}"
+    />
+  </div>
+</ng-container>

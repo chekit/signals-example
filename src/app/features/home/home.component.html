@@ -1,0 +1,9 @@
+<ng-container *ngIf="productsData$ | async as productsData">
+  <products-list [products]="productsData.products"></products-list>
+  <hr />
+  <p *ngIf="!!productsData.products">
+    {{ productsData!.products.length }} out of
+    {{ productsData!.total }}
+  </p>
+</ng-container>
+<button *ngIf="canLoadMore" (click)="onLoadMoreProducts()">Load More</button>
