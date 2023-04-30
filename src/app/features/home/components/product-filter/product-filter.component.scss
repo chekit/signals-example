@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  padding: 5px;
+
+  .filter {
+    &__label {
+      color: #222;
+      transition: color .3s ease-in-out;
+      cursor: pointer;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+
+  input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+  }
+}

@@ -10,7 +10,9 @@ import {
 } from 'src/app/core/models/products-response.model';
 import { ProductsService } from './../../core/services/products.service';
 import { ProductCardComponent } from './components/product-card/product-card.component';
+import { ProductsFilterComponent } from './components/product-filter/product-filter.component';
 import { ProductsListComponent } from './components/products-list/products-list.component';
+import { ProductFilterPipe } from './pipes/product-filter.pipe';
 
 @Component({
   selector: 'page-home',
@@ -20,7 +22,9 @@ import { ProductsListComponent } from './components/products-list/products-list.
     CommonModule,
     RouterLink,
     ProductCardComponent,
+    ProductsFilterComponent,
     ProductsListComponent,
+    ProductFilterPipe,
   ],
 })
 export class HomePageComponent implements OnInit {
@@ -66,6 +70,10 @@ export class HomePageComponent implements OnInit {
   onLoadMoreProducts(): void {
     const { limit, skip } = this.requestParamsSubject.getValue();
     this.requestParamsSubject.next({ limit, skip: skip + 10 });
+  }
+
+  onTermChange(value: string) {
+    console.log(value);
   }
 
   private concatProducts(prev: Product[] = [], next: Product[]): Product[] {

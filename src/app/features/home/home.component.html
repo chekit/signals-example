@@ -1,5 +1,10 @@
 <ng-container *ngIf="productsData$ | async as productsData">
-  <products-list [products]="productsData.products"></products-list>
+  <products-filter #filter />
+  <products-list
+    [products]="
+      productsData.products | productFilter : (filter.termChange | async)
+    "
+  />
   <hr />
   <p *ngIf="!!productsData.products">
     {{ productsData!.products.length }} out of
