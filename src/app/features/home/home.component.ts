@@ -88,15 +88,14 @@ export class HomePageComponent implements OnInit {
     const nextCategories = new Set(next.map(({ category }) => category));
     const prevCategories = new Set(prev.map(({ category }) => category));
 
-    if (nextCategories.size === 1 && prevCategories.size > 1) {
-      return next;
-    }
-
-    if (
+    const isSingleCategory =
+      nextCategories.size === 1 && prevCategories.size > 1;
+    const isNewSingleCategory =
       nextCategories.size === 1 &&
       prevCategories.size === 1 &&
-      !nextCategories.has(Array.from(prevCategories.values())[0])
-    ) {
+      !nextCategories.has(Array.from(prevCategories.values())[0]);
+
+    if (isSingleCategory || isNewSingleCategory) {
       return next;
     }
 
