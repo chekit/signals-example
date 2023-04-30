@@ -14,6 +14,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'category/:name',
+    loadComponent: () =>
+      import('./features/home/home.component').then((c) => c.HomePageComponent),
+  },
+  {
     path: '**',
     redirectTo: '/',
   },
