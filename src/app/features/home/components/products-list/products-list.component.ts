@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Product } from 'src/app/core/models/products-response.model';
 import { ProductCardComponent } from '../product-card/product-card.component';
 
@@ -9,6 +9,7 @@ import { ProductCardComponent } from '../product-card/product-card.component';
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
   imports: [CommonModule, ProductCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductsListComponent {
   @Input() products: Product[] = [];
