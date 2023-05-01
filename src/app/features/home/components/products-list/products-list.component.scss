@@ -1,7 +1,16 @@
 :host {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: stretch;
 
+  product-card {
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  .empty-message {
+    text-align: center;
+    font-weight: 500;
+  }
 }

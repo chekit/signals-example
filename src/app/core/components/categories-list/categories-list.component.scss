@@ -1,0 +1,42 @@
+  .categories {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 0 10px;
+    margin: 0;
+    list-style: none;
+
+    &__item {
+      margin: 0 10px 10px 0;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      a {
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #ccc;
+        text-decoration: none;
+        color: #222;
+        transition: all .15s ease-in-out;
+
+        &:hover,
+        &.active {
+          background-color: #3f3e3e;
+          color: #f3f3f3;
+        }
+
+        &.active,
+        &:active {
+          box-shadow: inset 1px 1px 3px rgba(0, 0, 0, .5);
+        }
+
+        &.active {
+          cursor: default;
+        }
+      }
+    }
+  }

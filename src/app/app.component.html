@@ -7,12 +7,6 @@
 
 <h1>{{ title() }}</h1>
 
-<ul *ngIf="categories$ | async as categories">
-  <li *ngFor="let categoryName of categories">
-    <a [routerLink]="['category', categoryName]" routerLinkActive="active">{{
-      categoryName
-    }}</a>
-  </li>
-</ul>
+<categories-list [categories]="categories$ | async" />
 
 <router-outlet />

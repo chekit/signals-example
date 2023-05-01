@@ -1,3 +1,11 @@
-<ng-container *ngFor="let product of products; trackBy: trackByFn">
-  <product-card [product]="product"></product-card>
+<ng-container *ngIf="products.length; else emptyMessage">
+  <ng-container *ngFor="let product of products; trackBy: trackByFn">
+    <product-card [product]="product"></product-card>
+  </ng-container>
 </ng-container>
+
+<ng-template #emptyMessage>
+  <div class="empty-message">
+    <p>No products found</p>
+  </div>
+</ng-template>

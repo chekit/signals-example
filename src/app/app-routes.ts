@@ -14,6 +14,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'category/:name/product/:id',
+    loadComponent: () =>
+      import('./features/product/product.component').then(
+        (c) => c.ProductPageComponent
+      ),
+  },
+  {
     path: 'category/:name',
     loadComponent: () =>
       import('./features/home/home.component').then((c) => c.HomePageComponent),

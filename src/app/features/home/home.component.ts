@@ -17,6 +17,7 @@ import { ProductFilterPipe } from './pipes/product-filter.pipe';
 @Component({
   selector: 'page-home',
   templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -29,7 +30,7 @@ import { ProductFilterPipe } from './pipes/product-filter.pipe';
 })
 export class HomePageComponent implements OnInit {
   title = 'HOME';
-  canLoadMore = true;
+  canLoadMore = false;
 
   private requestParamsSubject: BehaviorSubject<GetProductsConfig> =
     new BehaviorSubject({
@@ -39,6 +40,15 @@ export class HomePageComponent implements OnInit {
   private dataSubject: BehaviorSubject<ProductsResponse> = new BehaviorSubject(
     {} as ProductsResponse
   );
+
+  // POS
+  // products$ = this.requestParamsSubject.pipe(
+  //   concatMap((params) => this.productsService.getProducts(params)),
+  //   scan((acc: Product[], { products }) => {
+  //     acc.concat(products);
+  //     return acc;
+  //   }, [])
+  // );
 
   productsData$: Observable<ProductsResponse> = combineLatest([
     this.requestParamsSubject,
@@ -80,10 +90,6 @@ export class HomePageComponent implements OnInit {
     this.requestParamsSubject.next({ limit, skip: skip + 10 });
   }
 
-  onTermChange(value: string) {
-    console.log(value);
-  }
-
   private concatProducts(prev: Product[] = [], next: Product[]): Product[] {
     const nextCategories = new Set(next.map(({ category }) => category));
     const prevCategories = new Set(prev.map(({ category }) => category));
@@ -100,14 +106,5 @@ export class HomePageComponent implements OnInit {
     }
 
     return prev.concat(next);
-  }
-
-  private resetProductsData(): void {
-    this.dataSubject.next({
-      products: [],
-      limit: 10,
-      skip: 0,
-      total: 0,
-    });
   }
 }
