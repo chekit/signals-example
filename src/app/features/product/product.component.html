@@ -1,12 +1,5 @@
 <ng-container *ngIf="product$ | async as product">
   <h1>{{ product.title }}</h1>
   <p>{{ product.description }}</p>
-  <div class="carousel">
-    <img
-      *ngFor="let source of product.images"
-      class="carousel__item"
-      [src]="source"
-      alt="{{ product.description }}"
-    />
-  </div>
+  <app-carousel [slides]="product | imageDataTransformer" />
 </ng-container>
