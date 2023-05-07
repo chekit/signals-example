@@ -1,14 +1,17 @@
 <ng-container *ngIf="productsData$ | async as productsData">
   <products-filter #filter />
-  <products-list
-    [products]="
-      productsData.products | productFilter : (filter.termChange | async)
+  <ng-container
+    *ngIf="
+      productsData.products
+        | productFilter : (filter.termChange | async) as products
     "
-  />
-  <hr />
-  <p *ngIf="!!productsData.products">
-    {{ productsData!.products.length }} out of
-    {{ productsData!.total }}
-  </p>
+  >
+    <products-list [products]="products" />
+    <hr />
+    <p>
+      {{ products.length }} out of
+      {{ productsData!.total }}
+    </p>
+  </ng-container>
 </ng-container>
 <button *ngIf="canLoadMore" (click)="onLoadMoreProducts()">Load More</button>

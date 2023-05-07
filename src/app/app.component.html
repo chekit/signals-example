@@ -1,9 +1,23 @@
-<a
-  routerLink="/"
-  routerLinkActive="active"
-  [routerLinkActiveOptions]="{ exact: true }"
-  >Home</a
->
+<nav>
+  <ul class="nav-list">
+    <li class="nav-list__item">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Home</a
+      >
+    </li>
+    <li class="nav-list__item">
+      <a
+        routerLink="/add-product"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Add Product</a
+      >
+    </li>
+  </ul>
+</nav>
 
 <h1>{{ title() }}</h1>
 

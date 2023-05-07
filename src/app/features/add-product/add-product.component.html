@@ -1,0 +1,85 @@
+<h2>{{ title }}</h2>
+
+<app-notification *ngIf="isAdded">The product is saved</app-notification>
+
+<ng-container
+  *ngIf="confirmationData$ | async as confirmationData; else addProductForm"
+>
+  <div class="product-details">
+    <p class="product-details__text">
+      <strong>Product title:</strong> {{ confirmationData.title }}
+    </p>
+    <p *ngIf="confirmationData.description" class="product-details__text">
+      <strong>Product description:</strong> {{ confirmationData.description }}
+    </p>
+    <p class="product-details__text">
+      <strong>Price:</strong> {{ confirmationData.title }}
+    </p>
+    <p class="product-details__text">
+      <strong>Category:</strong> {{ confirmationData.category | titlecase }}
+    </p>
+  </div>
+</ng-container>
+
+<ng-template #addProductForm>
+  <form
+    class="product-form"
+    [formGroup]="productForm"
+    (ngSubmit)="submitProduct()"
+  >
+    <fieldset class="product-form__section" [disabled]="isLoading">
+      <label for="product-title" class="product-form__label is-required">
+        Product name:&nbsp;
+        <input
+          type="text"
+          id="product-title"
+          class="product-form__input"
+          name="product-title"
+          formControlName="title"
+        />
+      </label>
+      <label for="product-description" class="product-form__label">
+        Product description:&nbsp;
+        <textarea
+          id="product-description"
+          class="product-form__textarea"
+          name="product-description"
+          formControlName="description"
+        ></textarea>
+      </label>
+      <label for="product-price" class="product-form__label is-required">
+        Price:&nbsp;
+        <input
+          type="number"
+          id="product-price"
+          class="product-form__input product-form__input--price"
+          name="product-price"
+          formControlName="price"
+        />
+      </label>
+      <label for="product-category" class="product-form__label is-required">
+        Category:&nbsp;
+        <select
+          name="product-category"
+          id="product-category"
+          class="product-form__input"
+          formControlName="category"
+        >
+          <ng-container *ngIf="categories$ | async as categories">
+            <option>Select category</option>
+            <option *ngFor="let category of categories" [value]="category">
+              {{ category | titlecase }}
+            </option>
+          </ng-container>
+        </select>
+      </label>
+    </fieldset>
+    <button
+      type="submit"
+      class="product-form__button"
+      [disabled]="!productForm.valid"
+    >
+      Submit product
+    </button>
+  </form>
+</ng-template>

@@ -1,0 +1,8 @@
+<div
+  class="notification"
+  [ngClass]="{
+    'notification--success': type === NotificationTypes.SUCCESS
+  }"
+>
+  <p class="notification__text"><ng-content></ng-content></p>
+</div>

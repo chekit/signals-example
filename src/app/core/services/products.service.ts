@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { GetProductsConfig } from '../models/get-products-config';
 import { Product, ProductsResponse } from '../models/products-response.model';
 
+export type AddProductPayload = Partial<Omit<Product, 'id'>>;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -27,5 +29,13 @@ export class ProductsService {
 
   getCategories(): Observable<string[]> {
     return this.http.get<string[]>(`/products/categories`);
+  }
+
+  addProduct(payload: AddProductPayload): Observable<Product> {
+    return this.http.post<Product>(`/products/add`, JSON.stringify(payload), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 }
