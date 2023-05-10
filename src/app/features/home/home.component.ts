@@ -13,6 +13,7 @@ import { ProductCardComponent } from './components/product-card/product-card.com
 import { ProductsFilterComponent } from './components/product-filter/product-filter.component';
 import { ProductsListComponent } from './components/products-list/products-list.component';
 import { ProductFilterPipe } from './pipes/product-filter.pipe';
+import { LoaderComponent } from '../../core/components/loader/loader.component';
 
 @Component({
   selector: 'page-home',
@@ -26,11 +27,17 @@ import { ProductFilterPipe } from './pipes/product-filter.pipe';
     ProductsFilterComponent,
     ProductsListComponent,
     ProductFilterPipe,
+    LoaderComponent,
   ],
 })
 export class HomePageComponent {
   title = 'HOME';
   canLoadMore = false;
+
+  private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject(
+    true
+  );
+  isLoading$: Observable<boolean> = this.isLoadingSubject.asObservable();
 
   private requestParamsSubject: BehaviorSubject<GetProductsConfig> =
     new BehaviorSubject({
@@ -45,6 +52,7 @@ export class HomePageComponent {
     this.requestParamsSubject,
     this.route.params,
   ]).pipe(
+    tap(() => this.isLoadingSubject.next(true)),
     concatMap(([params, { name }]: [GetProductsConfig, Params]) =>
       this.productsService.getProducts(params, name)
     ),
@@ -62,7 +70,8 @@ export class HomePageComponent {
     map(() => this.dataSubject.getValue()),
     tap((data) => {
       this.canLoadMore = data.products.length < data.total;
-    })
+    }),
+    tap(() => this.isLoadingSubject.next(false))
   );
 
   constructor(

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ImageData } from 'src/app/core/components/carousel/models/image.model';
+import { ImageData } from 'src/app/core/components';
 import { Product } from 'src/app/core/models/products-response.model';
 
 @Pipe({

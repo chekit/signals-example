@@ -14,4 +14,5 @@
     </p>
   </ng-container>
 </ng-container>
+<app-loader *ngIf="isLoading$ | async" />
 <button *ngIf="canLoadMore" (click)="onLoadMoreProducts()">Load More</button>

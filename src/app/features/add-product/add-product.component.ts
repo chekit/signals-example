@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, Subject, finalize } from 'rxjs';
-import { NotificationComponent } from 'src/app/core/components/notification/notification.component';
+import { NotificationComponent } from 'src/app/core/components';
 import { Product } from 'src/app/core/models/products-response.model';
 import {
   AddProductPayload,
