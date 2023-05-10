@@ -8,12 +8,15 @@ import {
   Product,
   ProductsResponse,
 } from 'src/app/core/models/products-response.model';
+import {
+  ComponentWithLoaderBase,
+  LoaderComponent,
+} from '../../core/components';
 import { ProductsService } from './../../core/services/products.service';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductsFilterComponent } from './components/product-filter/product-filter.component';
 import { ProductsListComponent } from './components/products-list/products-list.component';
 import { ProductFilterPipe } from './pipes/product-filter.pipe';
-import { LoaderComponent } from '../../core/components/loader/loader.component';
 
 @Component({
   selector: 'page-home',
@@ -30,14 +33,8 @@ import { LoaderComponent } from '../../core/components/loader/loader.component';
     LoaderComponent,
   ],
 })
-export class HomePageComponent {
-  title = 'HOME';
+export class HomePageComponent extends ComponentWithLoaderBase {
   canLoadMore = false;
-
-  private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject(
-    true
-  );
-  isLoading$: Observable<boolean> = this.isLoadingSubject.asObservable();
 
   private requestParamsSubject: BehaviorSubject<GetProductsConfig> =
     new BehaviorSubject({
@@ -77,7 +74,9 @@ export class HomePageComponent {
   constructor(
     private productsService: ProductsService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    super();
+  }
 
   onLoadMoreProducts(): void {
     const { limit, skip } = this.requestParamsSubject.getValue();

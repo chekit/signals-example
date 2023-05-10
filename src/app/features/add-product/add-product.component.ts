@@ -2,7 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, Subject, finalize } from 'rxjs';
-import { NotificationComponent } from 'src/app/core/components';
+import {
+  ComponentWithLoaderBase,
+  NotificationComponent,
+} from 'src/app/core/components';
 import { Product } from 'src/app/core/models/products-response.model';
 import {
   AddProductPayload,
@@ -16,13 +19,14 @@ import {
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.scss'],
 })
-export class AddProductPageComponent {
+export class AddProductPageComponent extends ComponentWithLoaderBase {
   title = 'Add Product';
-  categories$ = this.productsServvice.getCategories();
-  isLoading = false;
+  categories$ = this.productsService.getCategories();
   isAdded = false;
-  private confirmationDataSubject: Subject<Partial<Product>> = new Subject();
-  confirmationData$: Observable<Partial<Product>> =
+
+  private confirmationDataSubject: Subject<Partial<Product> | null> =
+    new Subject();
+  confirmationData$: Observable<Partial<Product> | null> =
     this.confirmationDataSubject.asObservable();
 
   protected productForm = this.fb.group({
@@ -33,19 +37,29 @@ export class AddProductPageComponent {
   });
 
   constructor(
-    private productsServvice: ProductsService,
+    private productsService: ProductsService,
     private fb: FormBuilder
-  ) {}
+  ) {
+    super();
+
+    this.isLoadingSubject.next(false);
+  }
 
   submitProduct() {
-    this.isLoading = true;
+    this.isLoadingSubject.next(true);
 
-    this.productsServvice
+    this.productsService
       .addProduct(this.productForm.value as AddProductPayload)
-      .pipe(finalize(() => (this.isLoading = false)))
+      .pipe(finalize(() => this.isLoadingSubject.next(false)))
       .subscribe((data) => {
         this.confirmationDataSubject.next(data);
         this.isAdded = true;
       });
+  }
+
+  onAddNewProduct() {
+    this.isAdded = false;
+    this.confirmationDataSubject.next(null);
+    this.productForm.reset();
   }
 }

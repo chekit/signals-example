@@ -19,6 +19,9 @@
       <strong>Category:</strong> {{ confirmationData.category | titlecase }}
     </p>
   </div>
+  <button class="add-button" (click)="onAddNewProduct()">
+    Add new product
+  </button>
 </ng-container>
 
 <ng-template #addProductForm>
@@ -27,7 +30,7 @@
     [formGroup]="productForm"
     (ngSubmit)="submitProduct()"
   >
-    <fieldset class="product-form__section" [disabled]="isLoading">
+    <fieldset class="product-form__section" [disabled]="isLoading$ | async">
       <label for="product-title" class="product-form__label is-required">
         Product name:&nbsp;
         <input
