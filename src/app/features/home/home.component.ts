@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, effect } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
@@ -28,7 +28,7 @@ import { ProductFilterPipe } from './pipes/product-filter.pipe';
     ProductFilterPipe,
   ],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent {
   title = 'HOME';
   canLoadMore = false;
 
@@ -40,15 +40,6 @@ export class HomePageComponent implements OnInit {
   private dataSubject: BehaviorSubject<ProductsResponse> = new BehaviorSubject(
     {} as ProductsResponse
   );
-
-  // POS
-  // products$ = this.requestParamsSubject.pipe(
-  //   concatMap((params) => this.productsService.getProducts(params)),
-  //   scan((acc: Product[], { products }) => {
-  //     acc.concat(products);
-  //     return acc;
-  //   }, [])
-  // );
 
   productsData$: Observable<ProductsResponse> = combineLatest([
     this.requestParamsSubject,
@@ -77,13 +68,7 @@ export class HomePageComponent implements OnInit {
   constructor(
     private productsService: ProductsService,
     private route: ActivatedRoute
-  ) {
-    effect((clean) => {
-      clean(() => console.log('clean home'));
-    });
-  }
-
-  ngOnInit(): void {}
+  ) {}
 
   onLoadMoreProducts(): void {
     const { limit, skip } = this.requestParamsSubject.getValue();

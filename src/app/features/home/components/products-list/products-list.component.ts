@@ -9,7 +9,7 @@ import { ProductCardComponent } from '../product-card/product-card.component';
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
   imports: [CommonModule, ProductCardComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsListComponent {
   @Input() products: Product[] = [];

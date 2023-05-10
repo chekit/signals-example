@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, effect } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, Subject, finalize } from 'rxjs';
 import { NotificationComponent } from 'src/app/core/components/notification/notification.component';
@@ -16,7 +16,7 @@ import {
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.scss'],
 })
-export class AddProductPageComponent implements OnInit {
+export class AddProductPageComponent {
   title = 'Add Product';
   categories$ = this.productsServvice.getCategories();
   isLoading = false;
@@ -35,13 +35,7 @@ export class AddProductPageComponent implements OnInit {
   constructor(
     private productsServvice: ProductsService,
     private fb: FormBuilder
-  ) {
-    effect((clean) => {
-      clean(() => console.log('clean edit'));
-    });
-  }
-
-  ngOnInit(): void {}
+  ) {}
 
   submitProduct() {
     this.isLoading = true;
