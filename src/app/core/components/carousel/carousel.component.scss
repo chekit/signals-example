@@ -34,12 +34,12 @@
     opacity: 0.2;
     left: 20px;
     background: none;
-    background-image: url(../../../../assets/paddle_prev_999.png);
+    background-image: url(/assets/paddle_prev_999.png);
     transition: 0.2s linear all;
 
     &:hover {
       opacity: 1;
-      background-image: url(../../../../assets/paddle_prev_fff.png);
+      background-image: url(/assets/paddle_prev_fff.png);
     }
   }
 
@@ -47,12 +47,12 @@
     opacity: 0.2;
     right: 20px;
     background: none;
-    background-image: url(../../../../assets/paddle_next_999.png);
+    background-image: url(/assets/paddle_next_999.png);
     transition: 0.2s linear all;
 
     &:hover {
       opacity: 1;
-      background-image: url(../../../../assets/paddle_next_fff.png);
+      background-image: url(/assets/paddle_next_fff.png);
     }
   }
 }
