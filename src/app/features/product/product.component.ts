@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, switchMap, tap } from 'rxjs';
 import { Product } from 'src/app/core/models/products-response.model';
@@ -26,12 +27,16 @@ export class ProductPageComponent extends ComponentWithLoaderBase {
   product$: Observable<Product> = this.route.params.pipe(
     tap(() => this.isLoadingSubject.next(true)),
     switchMap(({ id }: Params) => this.productsService.getProduct(id)),
-    tap(() => this.isLoadingSubject.next(false))
+    tap((product) => {
+      this.title.setTitle(product.title);
+      this.isLoadingSubject.next(false);
+    })
   );
 
   constructor(
     private productsService: ProductsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private title: Title
   ) {
     super();
   }

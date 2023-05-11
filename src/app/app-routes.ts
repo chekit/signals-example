@@ -5,6 +5,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./features/home/home.component').then((c) => c.HomePageComponent),
+    title: 'Products catalogue',
   },
   {
     path: 'add-product',
@@ -12,6 +13,7 @@ export const routes: Routes = [
       import('./features/add-product/add-product.component').then(
         (c) => c.AddProductPageComponent
       ),
+    title: 'Add product',
   },
   {
     path: 'product/:id',
@@ -31,6 +33,7 @@ export const routes: Routes = [
     path: 'category/:name',
     loadComponent: () =>
       import('./features/home/home.component').then((c) => c.HomePageComponent),
+    title: 'Product catergory',
   },
   {
     path: '**',

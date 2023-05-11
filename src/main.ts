@@ -12,6 +12,5 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideHttpClient(withInterceptors([baseUrlInterceptor])),
     importProvidersFrom(BrowserAnimationsModule),
-    /* provideClientHydration -- Investigate */
   ],
 }).catch((err) => console.error(err));
