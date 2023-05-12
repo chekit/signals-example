@@ -12,5 +12,5 @@ import { Product } from 'src/app/core/models/products-response.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCardComponent {
-  @Input() product!: Product;
+  @Input({ required: true }) product!: Product;
 }
