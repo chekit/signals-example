@@ -11,5 +11,5 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoriesListComponent {
-  @Input() categories: string[] | null = [];
+  @Input() categories: string[] = [];
 }

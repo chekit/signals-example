@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { Observable } from 'rxjs';
 import { CategoriesListComponent } from './core/components';
 import { ProductsService } from './core/services/products.service';
 
@@ -19,7 +18,7 @@ import { ProductsService } from './core/services/products.service';
   ],
 })
 export class AppComponent {
-  categories$: Observable<string[]> = this.productsService.getCategories();
+  categories: Signal<string[]> = this.productsService.getCategories();
 
   constructor(private productsService: ProductsService) {}
 }

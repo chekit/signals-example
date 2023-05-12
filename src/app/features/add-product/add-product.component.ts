@@ -21,7 +21,7 @@ import {
 })
 export class AddProductPageComponent extends ComponentWithLoaderBase {
   title = 'Add Product';
-  categories$ = this.productsService.getCategories();
+  categories = this.productsService.getCategories();
   isAdded = false;
 
   private confirmationDataSubject: Subject<Partial<Product> | null> =

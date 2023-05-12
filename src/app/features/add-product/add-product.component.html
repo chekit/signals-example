@@ -68,12 +68,10 @@
           class="product-form__input"
           formControlName="category"
         >
-          <ng-container *ngIf="categories$ | async as categories">
-            <option>Select category</option>
-            <option *ngFor="let category of categories" [value]="category">
-              {{ category | titlecase }}
-            </option>
-          </ng-container>
+          <option>Select category</option>
+          <option *ngFor="let category of categories()" [value]="category">
+            {{ category | titlecase }}
+          </option>
         </select>
       </label>
     </fieldset>

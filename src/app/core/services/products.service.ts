@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { GetProductsConfig } from '../models/get-products-config';
 import { Product, ProductsResponse } from '../models/products-response.model';
@@ -27,8 +28,10 @@ export class ProductsService {
     return this.http.get<Product>(`/products/${id}`);
   }
 
-  getCategories(): Observable<string[]> {
-    return this.http.get<string[]>(`/products/categories`);
+  getCategories(): Signal<string[]> {
+    return toSignal(this.http.get<string[]>(`/products/categories`), {
+      initialValue: [],
+    });
   }
 
   addProduct(payload: AddProductPayload): Observable<Product> {
