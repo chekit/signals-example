@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
@@ -47,17 +48,14 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     return products.length < total;
   });
 
-  private requestParamsSubject: BehaviorSubject<GetProductsConfig> =
-    new BehaviorSubject({
-      limit: 10,
-      skip: 0,
-    });
+  requestParams = signal<GetProductsConfig>({ limit: 10, skip: 0 });
+
   private dataSubject: BehaviorSubject<ProductsResponse> = new BehaviorSubject(
     {} as ProductsResponse
   );
 
   productsData$: Observable<ProductsResponse> = combineLatest([
-    this.requestParamsSubject,
+    toObservable(this.requestParams),
     this.route.params,
   ]).pipe(
     tap(() => this.isLoadingSubject.next(true)),
@@ -90,8 +88,10 @@ export class HomePageComponent extends ComponentWithLoaderBase {
   }
 
   onLoadMoreProducts(): void {
-    const { limit, skip } = this.requestParamsSubject.getValue();
-    this.requestParamsSubject.next({ limit, skip: skip + 10 });
+    this.requestParams.update(({ skip, limit }) => ({
+      limit,
+      skip: skip + 10,
+    }));
   }
 
   private concatProducts(prev: Product[] = [], next: Product[]): Product[] {
