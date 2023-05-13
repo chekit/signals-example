@@ -1,15 +1,9 @@
-<products-filter #filter />
-<ng-container
-  *ngIf="
-    products() | productFilter : (filter.termChange | async) as filteredProducts
-  "
->
-  <products-list [products]="filteredProducts" />
-  <hr />
-  <p>
-    {{ filteredProducts.length }} out of
-    {{ productsTotal() }}
-  </p>
-</ng-container>
+<products-filter (termChange)="searchTerm.set($event)" #filter />
+<products-list [products]="products()" />
+<hr />
+<p>
+  {{ products().length }} out of
+  {{ productsTotal() }}
+</p>
 <app-loader *ngIf="isLoading()" />
 <button *ngIf="canLoadMore()" (click)="onLoadMoreProducts()">Load More</button>

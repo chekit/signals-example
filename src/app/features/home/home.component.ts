@@ -16,7 +16,6 @@ import { ProductsService } from './../../core/services/products.service';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductsFilterComponent } from './components/product-filter/product-filter.component';
 import { ProductsListComponent } from './components/products-list/products-list.component';
-import { ProductFilterPipe } from './pipes/product-filter.pipe';
 
 @Component({
   selector: 'page-home',
@@ -29,7 +28,6 @@ import { ProductFilterPipe } from './pipes/product-filter.pipe';
     ProductCardComponent,
     ProductsFilterComponent,
     ProductsListComponent,
-    ProductFilterPipe,
     LoaderComponent,
   ],
 })
@@ -42,7 +40,9 @@ export class HomePageComponent extends ComponentWithLoaderBase {
 
   products = computed<Product[]>(() => {
     const { products } = this.productsData();
-    return products;
+    const term = this.searchTerm();
+
+    return this.filterProducts(products, term);
   });
 
   productsTotal = computed<number>(
@@ -53,6 +53,8 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     // Won't trigger any updates if the values are equal
     { equal: (a, b) => a === b }
   );
+
+  searchTerm = signal('');
 
   private requestParams = signal<GetProductsConfig>({ limit: 10, skip: 0 });
 
@@ -118,5 +120,13 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     }
 
     return prev.concat(next);
+  }
+
+  private filterProducts(value: Product[], term: string = ''): Product[] {
+    if (!term) return value;
+
+    return value.filter(({ title }) =>
+      title.toLocaleLowerCase().includes(term.toLocaleLowerCase())
+    );
   }
 }
