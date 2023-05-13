@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
@@ -34,7 +34,18 @@ import { ProductFilterPipe } from './pipes/product-filter.pipe';
   ],
 })
 export class HomePageComponent extends ComponentWithLoaderBase {
-  canLoadMore = false;
+  productsData = signal<ProductsResponse>({
+    total: 0,
+    skip: 0,
+    products: [],
+    limit: 0,
+  });
+
+  canLoadMore = computed<boolean>(() => {
+    const { total, products } = this.productsData();
+
+    return products.length < total;
+  });
 
   private requestParamsSubject: BehaviorSubject<GetProductsConfig> =
     new BehaviorSubject({
@@ -56,18 +67,18 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     tap((data: ProductsResponse) => {
       const { products: prev } = this.dataSubject.getValue();
       const { limit, skip, total, products: next } = data;
-
-      this.dataSubject.next({
+      const nextProductsDataState: ProductsResponse = {
         products: this.concatProducts(prev, next),
         limit,
         skip,
         total,
-      });
+      };
+
+      this.productsData.set(nextProductsDataState);
+
+      this.dataSubject.next(nextProductsDataState);
     }),
     map(() => this.dataSubject.getValue()),
-    tap((data) => {
-      this.canLoadMore = data.products.length < data.total;
-    }),
     tap(() => this.isLoadingSubject.next(false))
   );
 
