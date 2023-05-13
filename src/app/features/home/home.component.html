@@ -1,15 +1,14 @@
 <products-filter #filter />
 <ng-container
   *ngIf="
-    productsData().products
-      | productFilter : (filter.termChange | async) as products
+    products() | productFilter : (filter.termChange | async) as filteredProducts
   "
 >
-  <products-list [products]="products" />
+  <products-list [products]="filteredProducts" />
   <hr />
   <p>
-    {{ products.length }} out of
-    {{ productsData()!.total }}
+    {{ filteredProducts.length }} out of
+    {{ productsTotal() }}
   </p>
 </ng-container>
 <app-loader *ngIf="isLoading()" />

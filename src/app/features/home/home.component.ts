@@ -40,9 +40,23 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     return products.length < total;
   });
 
-  requestParams = signal<GetProductsConfig>({ limit: 10, skip: 0 });
+  products = computed<Product[]>(() => {
+    const { products } = this.productsData();
+    return products;
+  });
 
-  search = combineLatest([
+  productsTotal = computed<number>(
+    () => {
+      const { total } = this.productsData();
+      return total;
+    },
+    // Won't trigger any updates if the values are equal
+    { equal: (a, b) => a === b }
+  );
+
+  private requestParams = signal<GetProductsConfig>({ limit: 10, skip: 0 });
+
+  private search = combineLatest([
     toObservable(this.requestParams),
     this.route.params,
   ]).pipe(
@@ -65,7 +79,7 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     tap(() => this.isLoading.set(false))
   );
 
-  productsData = toSignal(this.search, {
+  private productsData = toSignal(this.search, {
     initialValue: {
       total: 0,
       skip: 0,
