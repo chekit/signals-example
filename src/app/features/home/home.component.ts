@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 import { GetProductsConfig } from 'src/app/core/models/get-products-config';
 import {
   Product,
@@ -50,29 +50,51 @@ export class HomePageComponent extends ComponentWithLoaderBase {
 
   requestParams = signal<GetProductsConfig>({ limit: 10, skip: 0 });
 
-  productsData$: Observable<ProductsResponse> = combineLatest([
-    toObservable(this.requestParams),
-    this.route.params,
-  ]).pipe(
-    tap(() => this.isLoadingSubject.next(true)),
-    concatMap(([params, { name }]: [GetProductsConfig, Params]) =>
-      this.productsService.getProducts(params, name)
-    ),
-    tap((data: ProductsResponse) => {
-      const { products: prev } = this.productsData();
-      const { limit, skip, total, products: next } = data;
-      const nextProductsDataState: ProductsResponse = {
-        products: this.concatProducts(prev, next),
-        limit,
-        skip,
-        total,
-      };
+  productsData$_2 = computed(() => {
+    combineLatest([toObservable(this.requestParams), this.route.params])
+      .pipe(
+        concatMap(([params, { name }]: [GetProductsConfig, Params]) =>
+          this.productsService.getProducts(params, name)
+        ),
+        map((data: ProductsResponse) => {
+          const { products: prev } = this.productsData();
+          const { limit, skip, total, products: next } = data;
+          const nextProductsDataState: ProductsResponse = {
+            products: this.concatProducts(prev, next),
+            limit,
+            skip,
+            total,
+          };
 
-      this.productsData.set(nextProductsDataState);
-    }),
-    map(() => this.productsData()),
-    tap(() => this.isLoadingSubject.next(false))
-  );
+          return nextProductsDataState;
+        })
+      )
+      .subscribe((res: ProductsResponse) => this.productsData.set(res));
+  });
+
+  // productsData$: Observable<ProductsResponse> = combineLatest([
+  //   toObservable(this.requestParams),
+  //   this.route.params,
+  // ]).pipe(
+  //   tap(() => this.isLoadingSubject.next(true)),
+  //   concatMap(([params, { name }]: [GetProductsConfig, Params]) =>
+  //     this.productsService.getProducts(params, name)
+  //   ),
+  //   tap((data: ProductsResponse) => {
+  //     const { products: prev } = this.productsData();
+  //     const { limit, skip, total, products: next } = data;
+  //     const nextProductsDataState: ProductsResponse = {
+  //       products: this.concatProducts(prev, next),
+  //       limit,
+  //       skip,
+  //       total,
+  //     };
+
+  //     this.productsData.set(nextProductsDataState);
+  //   }),
+  //   map(() => this.productsData()),
+  //   tap(() => this.isLoadingSubject.next(false))
+  // );
 
   constructor(
     private productsService: ProductsService,
