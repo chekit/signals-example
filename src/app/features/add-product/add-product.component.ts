@@ -42,15 +42,15 @@ export class AddProductPageComponent extends ComponentWithLoaderBase {
   ) {
     super();
 
-    this.isLoadingSubject.next(false);
+    this.isLoading.set(false);
   }
 
   submitProduct() {
-    this.isLoadingSubject.next(true);
+    this.isLoading.set(true);
 
     this.productsService
       .addProduct(this.productForm.value as AddProductPayload)
-      .pipe(finalize(() => this.isLoadingSubject.next(false)))
+      .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe((data) => {
         this.confirmationDataSubject.next(data);
         this.isAdded = true;

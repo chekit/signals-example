@@ -25,11 +25,11 @@ import { ImageDataTransformerPipe } from './pipes/image-data-transformer.pipe';
 })
 export class ProductPageComponent extends ComponentWithLoaderBase {
   product$: Observable<Product> = this.route.params.pipe(
-    tap(() => this.isLoadingSubject.next(true)),
+    tap(() => this.isLoading.set(true)),
     switchMap(({ id }: Params) => this.productsService.getProduct(id)),
     tap((product) => {
       this.title.setTitle(product.title);
-      this.isLoadingSubject.next(false);
+      this.isLoading.set(false);
     })
   );
 

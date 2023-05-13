@@ -30,7 +30,7 @@
     [formGroup]="productForm"
     (ngSubmit)="submitProduct()"
   >
-    <fieldset class="product-form__section" [disabled]="isLoading$ | async">
+    <fieldset class="product-form__section" [disabled]="isLoading()">
       <label for="product-title" class="product-form__label is-required">
         Product name:&nbsp;
         <input

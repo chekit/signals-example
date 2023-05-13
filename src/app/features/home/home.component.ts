@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
-import { combineLatest, concatMap, map } from 'rxjs';
+import { combineLatest, concatMap, map, tap } from 'rxjs';
 import { GetProductsConfig } from 'src/app/core/models/get-products-config';
 import {
   Product,
@@ -46,6 +46,7 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     toObservable(this.requestParams),
     this.route.params,
   ]).pipe(
+    tap(() => this.isLoading.set(true)),
     concatMap(([params, { name }]: [GetProductsConfig, Params]) =>
       this.productsService.getProducts(params, name)
     ),
@@ -60,7 +61,8 @@ export class HomePageComponent extends ComponentWithLoaderBase {
       };
 
       return nextProductsDataState;
-    })
+    }),
+    tap(() => this.isLoading.set(false))
   );
 
   productsData = toSignal(this.search, {

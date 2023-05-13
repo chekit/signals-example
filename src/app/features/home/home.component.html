@@ -12,5 +12,5 @@
     {{ productsData()!.total }}
   </p>
 </ng-container>
-<app-loader *ngIf="isLoading$ | async" />
+<app-loader *ngIf="isLoading()" />
 <button *ngIf="canLoadMore()" (click)="onLoadMoreProducts()">Load More</button>
