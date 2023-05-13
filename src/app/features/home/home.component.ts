@@ -50,10 +50,6 @@ export class HomePageComponent extends ComponentWithLoaderBase {
 
   requestParams = signal<GetProductsConfig>({ limit: 10, skip: 0 });
 
-  private dataSubject: BehaviorSubject<ProductsResponse> = new BehaviorSubject(
-    {} as ProductsResponse
-  );
-
   productsData$: Observable<ProductsResponse> = combineLatest([
     toObservable(this.requestParams),
     this.route.params,
@@ -63,7 +59,7 @@ export class HomePageComponent extends ComponentWithLoaderBase {
       this.productsService.getProducts(params, name)
     ),
     tap((data: ProductsResponse) => {
-      const { products: prev } = this.dataSubject.getValue();
+      const { products: prev } = this.productsData();
       const { limit, skip, total, products: next } = data;
       const nextProductsDataState: ProductsResponse = {
         products: this.concatProducts(prev, next),
@@ -73,10 +69,8 @@ export class HomePageComponent extends ComponentWithLoaderBase {
       };
 
       this.productsData.set(nextProductsDataState);
-
-      this.dataSubject.next(nextProductsDataState);
     }),
-    map(() => this.dataSubject.getValue()),
+    map(() => this.productsData()),
     tap(() => this.isLoadingSubject.next(false))
   );
 
