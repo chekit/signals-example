@@ -1,10 +1,8 @@
-<h2>{{ title }}</h2>
+<h2>{{ title() }}</h2>
 
-<app-notification *ngIf="isAdded">The product is saved</app-notification>
+<app-notification *ngIf="isAdded()">The product is saved</app-notification>
 
-<ng-container
-  *ngIf="confirmationData$ | async as confirmationData; else addProductForm"
->
+<ng-container *ngIf="addResult() as confirmationData; else addProductForm">
   <div class="product-details">
     <p class="product-details__text">
       <strong>Product title:</strong> {{ confirmationData.title }}
@@ -84,3 +82,5 @@
     </button>
   </form>
 </ng-template>
+
+<app-loader *ngIf="isLoading()" />

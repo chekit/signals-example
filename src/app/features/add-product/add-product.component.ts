@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Observable, Subject, finalize } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { finalize } from 'rxjs';
 import {
   ComponentWithLoaderBase,
   NotificationComponent,
@@ -11,23 +13,31 @@ import {
   AddProductPayload,
   ProductsService,
 } from 'src/app/core/services/products.service';
+import { LoaderComponent } from '../../core/components/loader/loader.component';
 
 @Component({
   selector: 'page-add-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NotificationComponent],
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NotificationComponent,
+    LoaderComponent,
+  ],
 })
 export class AddProductPageComponent extends ComponentWithLoaderBase {
-  title = 'Add Product';
-  categories = this.productsService.getCategories();
-  isAdded = false;
+  private route = inject(ActivatedRoute);
 
-  private confirmationDataSubject: Subject<Partial<Product> | null> =
-    new Subject();
-  confirmationData$: Observable<Partial<Product> | null> =
-    this.confirmationDataSubject.asObservable();
+  title = toSignal(this.route.title);
+  categories = this.productsService.getCategories();
+  isAdded = computed(() => {
+    const result = this.addResult();
+
+    return !!result;
+  });
+  addResult = signal<Partial<Product> | null>(null);
 
   protected productForm = this.fb.group({
     title: ['', Validators.required],
@@ -52,14 +62,13 @@ export class AddProductPageComponent extends ComponentWithLoaderBase {
       .addProduct(this.productForm.value as AddProductPayload)
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe((data) => {
-        this.confirmationDataSubject.next(data);
-        this.isAdded = true;
+        this.addResult.set(data);
       });
   }
 
   onAddNewProduct() {
-    this.isAdded = false;
-    this.confirmationDataSubject.next(null);
+    this.addResult.set(null);
+
     this.productForm.reset();
   }
 }
