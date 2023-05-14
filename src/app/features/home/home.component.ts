@@ -69,9 +69,9 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     concatMap(([params, { name }]: [GetProductsConfig, Params]) =>
       this.productsService.getProducts(params, name)
     ),
-    map((data: ProductsResponse) => {
+    map((response: ProductsResponse) => {
       const { products: prev } = this.productsData();
-      const { limit, skip, total, products: next } = data;
+      const { limit, skip, total, products: next } = response;
       const nextProductsDataState: ProductsResponse = {
         products: this.concatProducts(prev, next),
         limit,

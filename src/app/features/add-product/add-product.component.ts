@@ -38,11 +38,11 @@ export class AddProductPageComponent
   title = toSignal(this.route.title);
   categories = this.productsService.getCategories();
   isAdded = computed(() => {
-    const result = this.addResult();
+    const result = this.addProductResult();
 
     return !!result;
   });
-  addResult = signal<Partial<Product> | null>(null);
+  addProductResult = signal<Partial<Product> | null>(null);
 
   protected productForm = this.fb.group({
     title: ['', Validators.required],
@@ -61,13 +61,11 @@ export class AddProductPageComponent
     this.productsService
       .addProduct(this.productForm.value as AddProductPayload)
       .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe((data) => {
-        this.addResult.set(data);
-      });
+      .subscribe((response) => this.addProductResult.set(response));
   }
 
   onAddNewProduct() {
-    this.addResult.set(null);
+    this.addProductResult.set(null);
 
     this.productForm.reset();
   }
