@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, switchMap, tap } from 'rxjs';
@@ -24,14 +25,13 @@ import { ImageDataTransformerPipe } from './pipes/image-data-transformer.pipe';
   ],
 })
 export class ProductPageComponent extends ComponentWithLoaderBase {
-  product$: Observable<Product> = this.route.params.pipe(
+  private search$: Observable<Product> = this.route.params.pipe(
     tap(() => this.isLoading.set(true)),
     switchMap(({ id }: Params) => this.productsService.getProduct(id)),
-    tap((product) => {
-      this.title.setTitle(product.title);
-      this.isLoading.set(false);
-    })
+    tap(() => this.isLoading.set(false))
   );
+
+  product = toSignal(this.search$);
 
   constructor(
     private productsService: ProductsService,
@@ -39,5 +39,11 @@ export class ProductPageComponent extends ComponentWithLoaderBase {
     private title: Title
   ) {
     super();
+
+    effect(() => {
+      const data = this.product();
+
+      this.title.setTitle(data?.title || '');
+    });
   }
 }

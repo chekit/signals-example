@@ -1,4 +1,4 @@
-<ng-container *ngIf="product$ | async as product">
+<ng-container *ngIf="product() as product">
   <h1>{{ product.title }}</h1>
   <p>{{ product.description }}</p>
   <app-carousel [slides]="product | imageDataTransformer" />

@@ -58,7 +58,7 @@ export class HomePageComponent extends ComponentWithLoaderBase {
 
   private requestParams = signal<GetProductsConfig>({ limit: 10, skip: 0 });
 
-  private search = combineLatest([
+  private search$ = combineLatest([
     toObservable(this.requestParams),
     this.route.params,
   ]).pipe(
@@ -81,7 +81,7 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     tap(() => this.isLoading.set(false))
   );
 
-  private productsData = toSignal(this.search, {
+  private productsData = toSignal(this.search$, {
     initialValue: {
       total: 0,
       skip: 0,
