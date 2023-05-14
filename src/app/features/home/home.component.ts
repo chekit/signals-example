@@ -1,13 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
-import { combineLatest, concatMap, map, tap } from 'rxjs';
+import { combineLatest, concatMap, tap } from 'rxjs';
 import { GetProductsConfig } from 'src/app/core/models/get-products-config';
-import {
-  Product,
-  ProductsResponse,
-} from 'src/app/core/models/products-response.model';
+import { Product } from 'src/app/core/models/products-response.model';
 import {
   ComponentWithLoaderBase,
   LoaderComponent,
@@ -41,12 +38,7 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     return products.length < total;
   });
 
-  products = computed<Product[]>(() => {
-    const { products } = this.productsData();
-    const term = this.searchTerm();
-
-    return this.filterProducts(products, term);
-  });
+  products = signal<Product[]>([]);
 
   productsTotal = computed<number>(
     () => {
@@ -69,18 +61,6 @@ export class HomePageComponent extends ComponentWithLoaderBase {
     concatMap(([params, { name }]: [GetProductsConfig, Params]) =>
       this.productsService.getProducts(params, name)
     ),
-    map((response: ProductsResponse) => {
-      const { products: prev } = this.productsData();
-      const { limit, skip, total, products: next } = response;
-      const nextProductsDataState: ProductsResponse = {
-        products: this.concatProducts(prev, next),
-        limit,
-        skip,
-        total,
-      };
-
-      return nextProductsDataState;
-    }),
     tap(() => this.isLoading.set(false))
   );
 
@@ -92,6 +72,23 @@ export class HomePageComponent extends ComponentWithLoaderBase {
       limit: 0,
     },
   });
+
+  constructor() {
+    super();
+
+    effect(
+      () => {
+        const { products: next } = this.productsData();
+        const term = this.searchTerm();
+
+        this.products.update((prev) => {
+          const update = this.concatProducts(prev, next);
+          return this.filterProducts(update, term);
+        });
+      },
+      { allowSignalWrites: true }
+    );
+  }
 
   onLoadMoreProducts(): void {
     this.requestParams.update(({ skip, limit }) => ({
