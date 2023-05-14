@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -27,8 +27,13 @@ import { LoaderComponent } from '../../core/components/loader/loader.component';
     LoaderComponent,
   ],
 })
-export class AddProductPageComponent extends ComponentWithLoaderBase {
+export class AddProductPageComponent
+  extends ComponentWithLoaderBase
+  implements OnInit
+{
   private route = inject(ActivatedRoute);
+  private productsService = inject(ProductsService);
+  private fb = inject(FormBuilder);
 
   title = toSignal(this.route.title);
   categories = this.productsService.getCategories();
@@ -46,12 +51,7 @@ export class AddProductPageComponent extends ComponentWithLoaderBase {
     category: [null, Validators.required],
   });
 
-  constructor(
-    private productsService: ProductsService,
-    private fb: FormBuilder
-  ) {
-    super();
-
+  ngOnInit(): void {
     this.isLoading.set(false);
   }
 

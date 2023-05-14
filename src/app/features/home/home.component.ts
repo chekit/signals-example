@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { combineLatest, concatMap, map, tap } from 'rxjs';
@@ -32,6 +32,9 @@ import { ProductsListComponent } from './components/products-list/products-list.
   ],
 })
 export class HomePageComponent extends ComponentWithLoaderBase {
+  private productsService = inject(ProductsService);
+  private route = inject(ActivatedRoute);
+
   canLoadMore = computed<boolean>(() => {
     const { total, products } = this.productsData();
 
@@ -89,13 +92,6 @@ export class HomePageComponent extends ComponentWithLoaderBase {
       limit: 0,
     },
   });
-
-  constructor(
-    private productsService: ProductsService,
-    private route: ActivatedRoute
-  ) {
-    super();
-  }
 
   onLoadMoreProducts(): void {
     this.requestParams.update(({ skip, limit }) => ({
