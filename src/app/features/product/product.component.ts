@@ -7,10 +7,10 @@ import { Observable, switchMap, tap } from 'rxjs';
 import { Product } from 'src/app/core/models/products-response.model';
 import { ProductsService } from 'src/app/core/services/products.service';
 import {
-  CarouselComponent,
   ComponentWithLoaderBase,
   LoaderComponent,
 } from '../../core/components';
+import { CarouselComponent } from './components/carousel/carousel.component';
 import { ImageDataTransformerPipe } from './pipes/image-data-transformer.pipe';
 
 @Component({
