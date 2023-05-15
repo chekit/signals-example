@@ -1,5 +1,5 @@
 <div class="container slider">
-  <div [@slideAnimation]="currentIndex">
+  <div [@slideAnimation]="slideIndex()">
     <ng-template ngFor [ngForOf]="slides" let-slide let-i="index">
       <img
         *ngIf="isCurrentSlideIndex(i)"
@@ -19,7 +19,7 @@
       <ul class="dots">
         <li class="dot" *ngFor="let slide of slides; let i = index">
           <span
-            [ngClass]="{ active: isCurrentSlideIndex(i) }"
+            [ngClass]="{ active: slideIndex() === i }"
             (click)="setCurrentSlideIndex(i)"
             >{{ slide.description }}</span
           >

@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  signal,
+} from '@angular/core';
 import { ImageData } from './models/image.model';
 import { slideAnimation } from './slide.animation';
 
@@ -15,23 +20,25 @@ import { slideAnimation } from './slide.animation';
 export class CarouselComponent {
   @Input() slides: ImageData[] = [];
 
-  currentIndex = 0;
+  slideIndex = signal(0);
 
   setCurrentSlideIndex(index: number) {
-    this.currentIndex = index;
+    this.slideIndex.set(index);
   }
 
   isCurrentSlideIndex(index: number) {
-    return this.currentIndex === index;
+    return this.slideIndex() === index;
   }
 
   prevSlide() {
-    this.currentIndex =
-      this.currentIndex < this.slides.length - 1 ? ++this.currentIndex : 0;
+    this.slideIndex.update((prevState) => {
+      return prevState < this.slides.length - 1 ? ++prevState : 0;
+    });
   }
 
   nextSlide() {
-    this.currentIndex =
-      this.currentIndex > 0 ? --this.currentIndex : this.slides.length - 1;
+    this.slideIndex.update((prevState) => {
+      return prevState > 0 ? --prevState : this.slides.length - 1;
+    });
   }
 }
