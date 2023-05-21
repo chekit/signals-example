@@ -9,7 +9,7 @@ import { ImageData } from './models/image.model';
 import { slideAnimation } from './slide.animation';
 
 @Component({
-  selector: 'app-carousel',
+  selector: 'app-image-carousel',
   templateUrl: './carousel.component.html',
   styleUrls: ['./carousel.component.scss'],
   animations: [slideAnimation],

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ImageData } from 'src/app/core/components';
 import { Product } from 'src/app/core/models/products-response.model';
+import { ImageData } from '../components/carousel/models/image.model';
 
 @Pipe({
   name: 'imageDataTransformer',
