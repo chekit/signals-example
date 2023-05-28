@@ -4,12 +4,12 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, switchMap, tap } from 'rxjs';
-import { Product } from 'src/app/core/models/products-response.model';
-import { ProductsService } from 'src/app/core/services/products.service';
 import {
   ComponentWithLoaderBase,
   LoaderComponent,
 } from '../../core/components';
+import { Product } from '../../core/models/products-response.model';
+import { ProductsService } from '../../core/services/products.service';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { ImageDataTransformerPipe } from './pipes/image-data-transformer.pipe';
 
@@ -27,7 +27,7 @@ import { ImageDataTransformerPipe } from './pipes/image-data-transformer.pipe';
 export class ProductPageComponent extends ComponentWithLoaderBase {
   private productData$: Observable<Product> = this.route.params.pipe(
     tap(() => this.isLoading.set(true)),
-    switchMap(({ id }: Params) => this.productsService.getProduct(id)),
+    switchMap(({ id }: Params) => this.productsService.getProductById(id)),
     tap(() => this.isLoading.set(false))
   );
 

@@ -6,14 +6,14 @@ import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 import {
   ComponentWithLoaderBase,
+  LoaderComponent,
   NotificationComponent,
-} from 'src/app/core/components';
-import { Product } from 'src/app/core/models/products-response.model';
+} from '../../core/components';
+import { Product } from '../../core/models/products-response.model';
 import {
   AddProductPayload,
   ProductsService,
-} from 'src/app/core/services/products.service';
-import { LoaderComponent } from '../../core/components/loader/loader.component';
+} from '../../core/services/products.service';
 
 @Component({
   selector: 'page-add-product',
