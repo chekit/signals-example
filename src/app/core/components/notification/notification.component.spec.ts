@@ -1,18 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Spectator, createComponentFactory } from '@ngneat/spectator/jest';
 import { NotificationComponent } from './notification.component';
 
 describe('NotificationComponent', () => {
+  let spectator: Spectator<NotificationComponent>;
   let component: NotificationComponent;
-  let fixture: ComponentFixture<NotificationComponent>;
+
+  const createComponent = createComponentFactory({
+    component: NotificationComponent,
+    detectChanges: false,
+  });
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [NotificationComponent]
-    });
-    fixture = TestBed.createComponent(NotificationComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
+    component = spectator.component;
   });
 
   it('should create', () => {
