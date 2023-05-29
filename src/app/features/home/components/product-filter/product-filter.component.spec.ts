@@ -1,21 +1,30 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { fakeAsync } from '@angular/core/testing';
+import { Spectator, createComponentFactory } from '@ngneat/spectator/jest';
 import { ProductsFilterComponent } from './product-filter.component';
 
 describe('ProductFilterComponent', () => {
+  let spectator: Spectator<ProductsFilterComponent>;
   let component: ProductsFilterComponent;
-  let fixture: ComponentFixture<ProductsFilterComponent>;
+
+  const createComponent = createComponentFactory({
+    component: ProductsFilterComponent,
+    detectChanges: false,
+  });
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [ProductsFilterComponent],
-    });
-    fixture = TestBed.createComponent(ProductsFilterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
+    component = spectator.component;
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should emit value', fakeAsync(() => {
+    const TERM = 'test';
+    spectator.detectChanges();
+
+    const emitSpy = jest.spyOn(component.termChange, 'emit');
+
+    component.filterInput.setValue(TERM);
+    spectator.tick(300);
+
+    expect(emitSpy).toHaveBeenCalledWith(TERM);
+  }));
 });
