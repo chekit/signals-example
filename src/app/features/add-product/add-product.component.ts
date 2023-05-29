@@ -44,11 +44,11 @@ export class AddProductPageComponent
   });
   addProductResult = signal<Partial<Product> | null>(null);
 
-  protected productForm = this.fb.group({
+  productForm = this.fb.group({
     title: ['', Validators.required],
     description: [''],
-    price: [null, Validators.required],
-    category: [null, Validators.required],
+    price: [0, Validators.required],
+    category: ['', Validators.required],
   });
 
   ngOnInit(): void {

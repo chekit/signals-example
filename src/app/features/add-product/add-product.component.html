@@ -1,11 +1,11 @@
 <h2>{{ title() }}</h2>
 
-<app-notification *ngIf="isAdded()">The product is saved</app-notification>
+<app-notification *ngIf="isAdded()" data-test="notification">The product is saved</app-notification>
 
 <ng-container
   *ngIf="addProductResult() as confirmationData; else addProductForm"
 >
-  <div class="product-details">
+  <div class="product-details" data-test="confirmation">
     <p class="product-details__text">
       <strong>Product title:</strong> {{ confirmationData.title }}
     </p>
@@ -29,6 +29,7 @@
     class="product-form"
     [formGroup]="productForm"
     (ngSubmit)="submitProduct()"
+    data-test="add-product-form"
   >
     <fieldset class="product-form__section" [disabled]="isLoading()">
       <label for="product-title" class="product-form__label is-required">
@@ -79,6 +80,7 @@
       type="submit"
       class="product-form__button"
       [disabled]="!productForm.valid"
+      data-test="submit-product-button"
     >
       Submit product
     </button>
