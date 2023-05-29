@@ -1,18 +1,20 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ActivatedRoute } from '@angular/router';
+import { Spectator, createComponentFactory } from '@ngneat/spectator/jest';
 import { ProductCardComponent } from './product-card.component';
 
 describe('ProductCardComponent', () => {
+  let spectator: Spectator<ProductCardComponent>;
   let component: ProductCardComponent;
-  let fixture: ComponentFixture<ProductCardComponent>;
+
+  const createComponent = createComponentFactory({
+    component: ProductCardComponent,
+    mocks: [ActivatedRoute],
+    detectChanges: false,
+  });
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [ProductCardComponent]
-    });
-    fixture = TestBed.createComponent(ProductCardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
+    component = spectator.component;
   });
 
   it('should create', () => {
