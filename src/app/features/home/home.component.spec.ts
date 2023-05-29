@@ -120,8 +120,11 @@ fdescribe('Home page', () => {
     expect(page.productsCards.length).toBe(PRODUCTS_RESPONSE.products.length);
     expect(page.emptyMessage).toBeFalsy();
 
-    const productsFilter = spectator.query(ProductsFilterComponent);
-    productsFilter?.termChange.next('test');
+    spectator.triggerEventHandler(
+      ProductsFilterComponent,
+      'termChange',
+      'test'
+    );
     // To make Signals to take an effect for the view we need to start the change detection
     spectator.detectChanges();
 
