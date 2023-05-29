@@ -11,3 +11,7 @@ This is the demo project to play around with a new Signal API
 - [RxJS Interop for Signals](https://angular.io/guide/rxjs-interop)
 
 - [Angular Architects signals overview](https://www.angulararchitects.io/aktuelles/angular-signals/)
+
+---
+
+Related issue: https://github.com/angular/angular/issues/50503
