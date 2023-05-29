@@ -1,9 +1,19 @@
-<products-filter (termChange)="searchTerm.set($event)" #filter />
+<products-filter
+  (termChange)="searchTerm.set($event)"
+  data-test="products-filter"
+  #filter
+/>
 <products-list [products]="products()" />
 <hr />
-<p>
+<p data-test="loaded-info">
   {{ products().length }} out of
   {{ productsTotal() }}
 </p>
-<app-loader *ngIf="isLoading()" />
-<button *ngIf="canLoadMore()" (click)="onLoadMoreProducts()">Load More</button>
+<app-loader *ngIf="isLoading()" data-test="loader" />
+<button
+  *ngIf="canLoadMore()"
+  (click)="onLoadMoreProducts()"
+  data-test="load-more-button"
+>
+  Load More
+</button>

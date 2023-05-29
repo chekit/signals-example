@@ -33,7 +33,8 @@ export class HomePageComponent extends ComponentWithLoaderBase {
   private route = inject(ActivatedRoute);
 
   canLoadMore = computed<boolean>(() => {
-    const { total, products } = this.productsData();
+    const total = this.productsTotal();
+    const products = this.products();
 
     return products.length < total;
   });
@@ -82,8 +83,8 @@ export class HomePageComponent extends ComponentWithLoaderBase {
         const term = this.searchTerm();
 
         this.products.update((prev) => {
-          const update = this.concatProducts(prev, next);
-          return this.filterProducts(update, term);
+          const products = this.concatProducts(prev, next);
+          return this.filterProducts(products, term);
         });
       },
       { allowSignalWrites: true }
