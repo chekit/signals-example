@@ -3,4 +3,4 @@
   <p>{{ product.description }}</p>
   <app-image-carousel [slides]="product | imageDataTransformer" />
 </ng-container>
-<app-loader *ngIf="isLoading()" />
+<app-loader *ngIf="isLoading()" data-test="loader" />
