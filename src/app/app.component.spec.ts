@@ -1,33 +1,35 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Spectator, createComponentFactory } from '@ngneat/spectator/jest';
 import { AppComponent } from './app.component';
+import { ProductsService } from './core/services/products.service';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [AppComponent],
-    }).compileComponents();
+  let spectator: Spectator<AppComponent>;
+  let component: AppComponent;
+
+  const createComponent = createComponentFactory({
+    component: AppComponent,
+    providers: [
+      {
+        provide: ProductsService,
+        useValue: {
+          getCategories: () => signal([]),
+        },
+      },
+    ],
+    mocks: [ActivatedRoute],
+    detectChanges: false,
+  });
+
+  beforeEach(() => {
+    spectator = createComponent();
+    component = spectator.component;
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+    spectator.detectChanges();
 
-  it(`should have as title 'todo'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain(
-      'todo app is running!'
-    );
+    expect(component).toBeTruthy();
   });
 });
