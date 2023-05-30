@@ -1,4 +1,4 @@
-import { fakeAsync } from '@angular/core/testing';
+import { discardPeriodicTasks, fakeAsync, flush } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { ActivatedRouteStub } from '@ngneat/spectator';
 import { Spectator, createComponentFactory } from '@ngneat/spectator/jest';
@@ -50,7 +50,7 @@ describe('ProductComponent', () => {
     component = spectator.component;
   });
 
-  it('should toggle loader', fakeAsync(() => {
+  it('should toggle loader', fakeAsync(async () => {
     spectator.detectChanges();
 
     let loader = spectator.query('[data-test="loader"]');
@@ -58,10 +58,12 @@ describe('ProductComponent', () => {
     expect(loader).toBeTruthy();
 
     // Creted and issue/request: https://github.com/angular/angular/issues/50503
-    // spectator.tick(400);
+    spectator.tick(400);
+    await spectator.fixture.whenStable();
+    spectator.detectChanges();
 
-    // loader = spectator.query('[data-test="loader"]');
+    loader = spectator.query('[data-test="loader"]');
 
-    // expect(loader).toBeFalsy();
+    expect(loader).toBeFalsy();
   }));
 });
